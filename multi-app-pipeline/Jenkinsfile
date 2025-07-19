@@ -39,7 +39,7 @@ pipeline {
         stage('Build NODE APP') {
             agent {
                 docker {
-                    image 'node:14-alpine'
+                    image 'node:24-alpine'
                 }
             }
             steps {

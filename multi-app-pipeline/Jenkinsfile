@@ -1,6 +1,6 @@
 // groovylint-disable CompileStatic
 pipeline {
-    agent any 
+    agent any
     stages {
         stage('Clone Repo')
         {
@@ -36,7 +36,7 @@ pipeline {
             }
         }
 
-        stage ('Build NODE APP') {
+        stage('Build NODE APP') {
             agent {
                 docker {
                     image 'node:14-alpine'

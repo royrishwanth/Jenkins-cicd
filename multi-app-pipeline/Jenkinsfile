@@ -9,17 +9,18 @@ pipeline {
                 sh 'ls -R'
             }
         }
-        stage('Build')
-        agent {
-            docker {
-                image 'maven:3.6.3-jdk-8-alpine'
+        stage('Build') {
+            agent {
+                docker {
+                    image 'maven:3.6.3-jdk-8-alpine'
+                }
+            }
+            steps {
+                echo 'Building the application'
+                dir('multi-app-pipeline/java') {
+                    sh 'mvn clean package'
             }
         }
-        steps {
-            echo 'Building the application'
-            dir('multi-app-pipeline/java') {
-                sh 'mvn clean package'
-            }
         }
         stage('Test java app') {
             agent {

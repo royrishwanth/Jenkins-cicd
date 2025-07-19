@@ -12,7 +12,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'maven:3.6.3-jdk-8-alpine'
+                    image 'maven:3.8.3-openjdk-17'
                 }
             }
             steps {
@@ -25,7 +25,7 @@ pipeline {
         stage('Test java app') {
             agent {
                 docker {
-                    image 'maven:3.6.3-jdk-8-alpine'
+                    image 'maven:3.8.3-openjdk-17'
                 }
             }
             steps {

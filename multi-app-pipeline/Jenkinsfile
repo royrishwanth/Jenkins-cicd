@@ -21,7 +21,6 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-    }
         stage('Test java app') {
             agent {
                 docker {
@@ -50,4 +49,5 @@ pipeline {
                 }
             }
         }
+    }
 }

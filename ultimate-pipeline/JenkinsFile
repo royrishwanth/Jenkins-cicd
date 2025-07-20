@@ -36,7 +36,11 @@ pipeline {
                 }
                 steps {
                     script {
-                        sh 'cd ultimate-pipeline/java && docker build -t ${DOCKER_IMAGE} .'
+                        sh """
+                            echo Build number is: ${BUILD_NUMBER}
+                            docker build -t royrishwanth/java-ci-cd-app:${BUILD_NUMBER} .
+                        """
+                        echo 'Pushing Docker image to Docker Hub...'
                         def dockerImage = docker.image("${DOCKER_IMAGE}")
                         docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIALS) {
                             dockerImage.push() }

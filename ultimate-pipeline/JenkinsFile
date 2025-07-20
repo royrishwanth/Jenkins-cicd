@@ -38,6 +38,7 @@ pipeline {
                     script {
                         sh """
                             echo Build number is: ${BUILD_NUMBER}
+                            cd ultimate-pipeline/
                             docker build -t royrishwanth/java-ci-cd-app:${BUILD_NUMBER} .
                         """
                         echo 'Pushing Docker image to Docker Hub...'

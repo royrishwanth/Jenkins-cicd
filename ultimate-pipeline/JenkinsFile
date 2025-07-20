@@ -60,6 +60,7 @@ pipeline {
                     sh """
                          pwd
                          ls -la
+                         git -status
                         git config user.email "royrishwanth@gmail.com"
                         git config user.name "Rishwanth Kothapalli"
                         BUILD_NUMBER=\${BUILD_NUMBER}

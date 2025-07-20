@@ -31,18 +31,18 @@ pipeline {
         }
         stage('Build and Push Docker Image') {
                 environment {
-                    DOCKER_IMAGE = "royrishwanth/java-ci-cd-app:${BUILD_NUMBER}"
                     REGISTRY_CREDENTIALS = credentials('docker-cred')
                 }
                 steps {
                     script {
-                        sh """
-                            echo Build number is: ${BUILD_NUMBER}
-                            cd ultimate-pipeline/
-                            docker build -t royrishwanth/java-ci-cd-app:${BUILD_NUMBER} .
-                        """
+                        def dockerImageTag = "royrishwanth/java-ci-cd-app:${BUILD_NUMBER}"
+                        echo "Build number is: ${BUILD_NUMBER}"
+                        echo "Docker image to be built and pushed: ${dockerImageTag}"
+                        dir('ultimate-pipeline') {
+                            sh "docker build -t ${dockerImageTag} ."
+                        }
                         echo 'Pushing Docker image to Docker Hub...'
-                        def dockerImage = docker.image("${DOCKER_IMAGE}")
+                        def dockerImage = docker.image(dockerImageTag)
                         docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIALS) {
                             dockerImage.push() }
                     }

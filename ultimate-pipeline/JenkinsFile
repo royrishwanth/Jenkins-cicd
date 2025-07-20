@@ -49,7 +49,7 @@ pipeline {
                 }
             }
 
-        stage('Update Deplyment File')
+        stage('Update Deployment File')
         {
             environment {
                 GIT_REPO_NAME = 'Jenkins-cicd'
@@ -58,11 +58,12 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
                     sh '''
+                        cd ci-cd/k8-manifests
                         git config user.email "royrishwanth@gmail.com"
                         git config user.name "Rishwanth Kothapalli"
                         BUILD_NUMBER=\${BUILD_NUMBER}
-                        sed -i "s/replaceImageTag/\${BUILD_NUMBER}/g" k8-manifests/deployment.yml
-                        git add k8-manifests/deployment.yml
+                        sed -i "s/replaceImageTag/\${BUILD_NUMBER}/g" deployment.yml
+                        git add deployment.yml
                         git commit -m "Updated deployment file with build number \${BUILD_NUMBER}"
                         git push https://\${GITHUB_TOKEN}@github.com/\${GIT_USER_NAME}/\${GIT_REPO_NAME} HEAD:main
                     '''

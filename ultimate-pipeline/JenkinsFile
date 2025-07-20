@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Sonar Code Analysis') {
             environment {
-                SONAR_HOST_URL = 'http://localhost:9000'
+                SONAR_HOST_URL = 'http://54.172.18.122:9000'
             }
             steps {
                 withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {

@@ -58,7 +58,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'GITHUB_TOKEN', variable: 'GITHUB_TOKEN')]) {
                     sh '''
-                        cd ci-cd/k8-manifests
+                        cd k8-manifests
                         git config user.email "royrishwanth@gmail.com"
                         git config user.name "Rishwanth Kothapalli"
                         BUILD_NUMBER=\${BUILD_NUMBER}

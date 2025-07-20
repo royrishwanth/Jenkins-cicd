@@ -10,8 +10,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                sh 'git clone'
-                sh 'git checkout main'
+                echo 'Checking out the code from GitHub...'
             }
         }
         stage('Build and Test') {

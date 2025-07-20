@@ -34,7 +34,7 @@ pipeline {
                     REGISTRY_CREDENTIALS = credentials('docker-cred')
                 }
                 steps {
-                    script {
+  /*                  script {
                         def dockerImageTag = "royrishwanth/java-ci-cd-app:${BUILD_NUMBER}"
                         echo "Build number is: ${BUILD_NUMBER}"
                         echo "Docker image to be built and pushed: ${dockerImageTag}"
@@ -48,6 +48,21 @@ pipeline {
                     }
                 }
             }
+*/
+                    script {
+                        def dockerImageTag = "royrishwanth/java-ci-cd-app:${BUILD_NUMBER}"
+                        echo "Docker image tag: ${dockerImageTag}"
+
+                        dir('ultimate-pipeline') {
+                            sh "docker build -t ${dockerImageTag} ."
+                        }
+
+                        echo 'Logging into Docker Hub...'
+                        sh "echo ${DOCKER_HUB_PASSWORD} | docker login -u ${DOCKER_HUB_USERNAME} --password-stdin"
+
+                        echo 'Pushing Docker image via shell...'
+                        sh "docker push ${dockerImageTag}"
+                    }
         stage('Update Deplyment File')
         {
             environment {

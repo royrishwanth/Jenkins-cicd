@@ -63,6 +63,8 @@ pipeline {
                         echo 'Pushing Docker image via shell...'
                         sh "docker push ${dockerImageTag}"
                     }
+                }
+        }
         stage('Update Deplyment File')
         {
             environment {

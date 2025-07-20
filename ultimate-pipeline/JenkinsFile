@@ -34,7 +34,7 @@ pipeline {
                     REGISTRY_CREDENTIALS = credentials('docker-cred')
                 }
                 steps {
-  /*                  script {
+                      script {
                         def dockerImageTag = "royrishwanth/java-ci-cd-app:${BUILD_NUMBER}"
                         echo "Build number is: ${BUILD_NUMBER}"
                         echo "Docker image to be built and pushed: ${dockerImageTag}"
@@ -43,36 +43,12 @@ pipeline {
                         }
                         echo 'Pushing Docker image to Docker Hub...'
                         def dockerImage = docker.image(dockerImageTag)
-                        docker.withRegistry('https://index.docker.io/v1/', REGISTRY_CREDENTIALS) {
+                        docker.withRegistry('https://index.docker.io/v1/', "docker-cred") {
                             dockerImage.push() }
                     }
                 }
             }
-*/
-                        script {
-                            def dockerImageTag = "royrishwanth/java-ci-cd-app:${BUILD_NUMBER}"
-                            echo "Docker image tag: ${dockerImageTag}"
 
-                            dir('ultimate-pipeline') {
-                                sh "docker build -t ${dockerImageTag} ."
-                            }
-
-                            echo 'Checking docker version...'
-                            sh "docker --version || true"
-
-                            echo 'Checking whoami...'
-                            sh "whoami || true"
-
-                            echo 'Checking docker login...'
-                            sh '''
-                            echo "$DOCKER_HUB_PASSWORD" | docker login -u "$DOCKER_HUB_USERNAME" --password-stdin
-                            '''
-                            echo 'Pushing Docker image...'
-                            sh "docker push ${dockerImageTag}"
-                        }
-
-                }
-        }
         stage('Update Deplyment File')
         {
             environment {

@@ -61,7 +61,6 @@ pipeline {
                         git config --global --add safe.directory /var/lib/jenkins/workspace/first-try
                         git config user.email "royrishwanth@gmail.com"
                         git config user.name "Rishwanth Kothapalli"
-                        git checkout main
                         BUILD_NUMBER=\${BUILD_NUMBER}
                         sed -i "s/replaceImageTag/\${BUILD_NUMBER}/g" k8-manifests/deployment.yml
                         git add k8-manifests/deployment.yml

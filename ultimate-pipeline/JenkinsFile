@@ -49,29 +49,35 @@ pipeline {
                 }
             }
 
-        stage('Update Deployment File')
-        {
+        stage('Update Deployment File') {
             environment {
                 GIT_REPO_NAME = 'Jenkins-cicd'
                 GIT_USER_NAME = 'royrishwanth'
             }
-            steps {
-                withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                sh """
-                    git config --global --add safe.directory /var/lib/jenkins/workspace/first-try
-                    git config user.email "royrishwanth@gmail.com"
-                    git config user.name "Rishwanth Kothapalli"
-                    
-                    git checkout main
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" k8-manifests/deployment.yml
-                    git add k8-manifests/deployment.yml
-                    git commit -m "Updated deployment file with build number ${BUILD_NUMBER}" || echo "No changes to commit"
-                    git pull --rebase origin main
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                """
+                steps {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            set -e
 
+                            git config --global --add safe.directory $(pwd)
+                            git config user.email "royrishwanth@gmail.com"
+                            git config user.name "Rishwanth Kothapalli"
+
+                            git checkout main
+                            git pull origin main
+
+                            # Replace only if placeholder exists
+                            if grep -q "replaceImageTag" k8-manifests/deployment.yml; then
+                            sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" k8-manifests/deployment.yml
+                            git add k8-manifests/deployment.yml
+                            git commit -m "Updated deployment file with build number ${BUILD_NUMBER}" --no-verify
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                            else
+                            echo "No placeholder found or nothing to change in deployment.yml"
+                            fi
+                        '''
+                    }
                 }
-            }
         }
     }
 }

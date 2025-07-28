@@ -65,6 +65,7 @@ pipeline {
                         sed -i "s/replaceImageTag/\${BUILD_NUMBER}/g" k8-manifests/deployment.yml
                         git add k8-manifests/deployment.yml
                         git commit -m "Updated deployment file with build number \${BUILD_NUMBER}"
+                        git pull --rebase origin main
                         git push https://\${GITHUB_TOKEN}@github.com/\${GIT_USER_NAME}/\${GIT_REPO_NAME} HEAD:main
                     """
                 }

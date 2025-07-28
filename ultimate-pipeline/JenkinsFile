@@ -57,18 +57,19 @@ pipeline {
             }
             steps {
                 withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                    sh """
-                        git config --global --add safe.directory /var/lib/jenkins/workspace/first-try
-                        git config user.email "royrishwanth@gmail.com"
-                        git config user.name "Rishwanth Kothapalli"
-                        BUILD_NUMBER=\${BUILD_NUMBER}
-                        git checkout main
-                        sed -i "s/replaceImageTag/\${BUILD_NUMBER}/g" k8-manifests/deployment.yml
-                        git add k8-manifests/deployment.yml
-                        git commit -m "Updated deployment file with build number \${BUILD_NUMBER}"
-                        git pull --rebase origin main
-                        git push https://\${GITHUB_TOKEN}@github.com/\${GIT_USER_NAME}/\${GIT_REPO_NAME} HEAD:main
-                    """
+                sh """
+                    git config --global --add safe.directory /var/lib/jenkins/workspace/first-try
+                    git config user.email "royrishwanth@gmail.com"
+                    git config user.name "Rishwanth Kothapalli"
+                    
+                    git checkout main
+                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" k8-manifests/deployment.yml
+                    git add k8-manifests/deployment.yml
+                    git commit -m "Updated deployment file with build number ${BUILD_NUMBER}" || echo "No changes to commit"
+                    git pull --rebase origin main
+                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+                """
+
                 }
             }
         }
